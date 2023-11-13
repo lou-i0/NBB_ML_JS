@@ -1,6 +1,8 @@
 body{
         font-family: Arial, Helvetica, sans-serif;
-        background-color:darkslategray
+        /* background-color:darkslategray */
+        background-color:black;
+        color:goldenrod;
     }
 
 #content{
