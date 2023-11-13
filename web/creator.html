@@ -6,6 +6,9 @@
         <meta name = "viewport" content ="width = device-width
                                         ,maximum-scale = 0.9
                                         ,user-scalable = 0" > <!-- this fits width of device being used-->
+        
+        <meta charset = "UTF-8">                              <!--To enable support of all characters used these days.-->
+        
         <title>Instone Data Creator</title>
         <link rel="stylesheet" href="styles.css">
     </head>
@@ -14,15 +17,107 @@
 
         <div id="content">
             <h1>Data Creator</h1>
+
+            <!-- Ask name of perticipant before proceeding -->
+            <input id = "participant" type = "text" placeholder="Please enter your name: "/>
+
+            <span id = "instructions"></span>
+
+            <button id = "proceed_btn" onclick = "start();">Proceed</button>
+
             <br>
-            <div id="drawBoxContainer"></div>
+            <br>
+
+            <div id="drawBoxContainer" style="visibility: hidden;">
+            </div>
         </div>
         <script src="js/drawBox.js"></script>
         <script src="js/draw.js"></script>
+<!--=======================================================================================================-->
+        <!-- Instantiate the sketchpad -->
 
-        <!--Instantiate the sketchpad-->
         <script>
+            let index = 0;  // instantiate the list of drawings to draw (mmax 8/7)
+            const labels = ["car", "fish", "house","tree","bicycle","guitar", "pencil", "clock" ]; // list of things to draw
+
+            const data = {
+                            participant:null                // persons name.
+                            ,session: new Date().getTime()  // unique id for session 
+                            ,drawings:{}                    //store all paths one is drawing
+                        };
+
             const draw_box= new DrawBox(drawBoxContainer);
+//===========================================================================================================
+            // Function to collect data of participant from user. 
+            //===================================================           
+            function start()
+            {
+                // if value is blank,  ask for name 
+                if(participant.value == "" ){alert("Please enter your name first!");return;}
+
+                // get value entered from particpant
+                data.participant = participant.value;
+
+                // remove prompt now value is entered.
+                participant.style.display = "none";
+                
+                drawBoxContainer.style.visibility = "visible";
+
+                const label_select = labels[index];                             // pick list value from labels based on index number.
+
+                instructions.innerHTML = "Please draw a "+label_select;         // instructions based on current label selected 
+                proceed_btn.innerHTML = "Next";                                 // change previous proceed button at start to NEXT.
+                proceed_btn.onclick = next;
+            }
+//===========================================================================================================
+            // Function to move participant to the next screen to draw something.
+            //=================================================== 
+            function next()
+            {
+                if(draw_box.paths.length ==0 ){alert("draw something first!"); return;}
+                const label_select = labels[index];                             // pick value from labels based on index number.
+                data.drawings[label_select] = draw_box.paths;
+                draw_box.reset();
+
+                //increase index by 1 
+                index++;
+                if (index < labels.length)
+                {
+                    const next_label_select = labels[index];                        // pick value from labels based on index number.
+                    instructions.innerHTML = "Please draw a "+ next_label_select; // instructions based on current label selected 
+                    proceed_btn.innerHTML = "Next";                              // change previous proceed button at start to NEXT.
+                    proceed_btn.onclick = next;  
+                }
+                else
+                {
+                    drawBoxContainer.style.visibility = "hidden";
+                    instructions.innerHTML = "Thank you for completing this Exercise. Please click on Save to download the data collected";
+                    proceed_btn.innerHTML = "Save";
+                    proceed_btn.onclick = save;
+                }
+            }
+//===========================================================================================================
+            // Function to save data collected from participant onto local machine.
+            //=================================================== 
+            function save()
+            {
+                proceed_btn.style.display = "none";              // hide the proceed_btn - no longer needed.
+
+                instructions.innerHTML = "Please download file and place with others."
+
+                const info = document.createElement('a'); //link element
+                info.setAttribute('href','data:text/plain; charset=utf-8,' + encodeURIComponent(JSON.stringify(data)))
+
+                const file_name = data.session + ".json";
+                info.setAttribute('download',file_name);
+                info.style.display = "none";
+
+                document.body.appendChild(info);
+                info.click();
+                document.body.removeChild(info);
+
+                // t
+            }
         </script>
     </body>
 

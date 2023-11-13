@@ -15,17 +15,34 @@ class DrawBox{
                                         `;
                     container.appendChild(this.canvas);
 
+                    // Add an undo button on page
+                    //=========================
+                    const break_line = document.createElement("br");
+                    container.appendChild(break_line);
+
+                    this.undoBtn = document.createElement("button");
+                    this.undoBtn.innerHTML = "Undo";
+                    container.appendChild(this.undoBtn);
+
                     // draw onto the canvas
                     //=========================
                     this.ctx = this.canvas.getContext("2d"); // to draw in 2d space context
 
-                    this.paths = [];
-                    this.isDrawing=false;
+                    // prep for drawing 
+                    this.reset();
 
                     // private method: listen for mouse events
                     //--------------------------
                     this.#addEventListeners();
 
+                }
+                // public method to  get canvas ready for drawing.
+                //=========================
+                reset()
+                {
+                    this.paths = [];
+                    this.isDrawing=false;
+                    this.#redraw();
                 }
 
                 // Private methods to listen to mouse events. Cannot be called.
@@ -84,14 +101,22 @@ class DrawBox{
                     //=========================
                     // For Web 
                     //-------------------------
-                    this.canvas.onmouseup =()=> {this.isDrawing=false;}
+                    // this.canvas.onmouseup =()=> {this.isDrawing=false;}
+                    document.onmouseup =()=> {this.isDrawing=false;}
                     // for touchscreen.
                     //-------------------------
-                    this.canvas.ontouchend=()=>{this.canvas.onmouseup();}
+                    this.canvas.ontouchend=()=>{document.onmouseup();}
 
+                    //=========================
+                    // Remove last line with undo button
+                    //=========================
+                    this.undoBtn.onclick=()=>
+                    {
+                        this.paths.pop();
+                        this.#redraw();
+                    }
                 }
                 
-
                 // Method to retrieve coords
                 //=========================
                 #get_mouse=(evt)=>
@@ -108,6 +133,8 @@ class DrawBox{
                     this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height); //clear canvas
 
                     draw.paths(this.ctx, this.paths);
+
+                    if(this.paths.length> 0){this.undoBtn.disabled=false} else{this.undoBtn.disabled=true};
                 }
 
             }

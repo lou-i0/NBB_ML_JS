@@ -1,14 +1,39 @@
-body{
-        font-family: Arial, Helvetica, sans-serif;
-        /* background-color:darkslategray */
-        background-color:black;
-        color:goldenrod;
-    }
+body
+{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color:black;
+    color:goldenrod;
+}
 
-#content{
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%,-50%);
-            text-align: center;
-        }
+#content
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+}
+button
+{
+    background-color: goldenrod;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    height: 22px;
+    padding: 2px 10px 2px 10px;
+}
+
+button:hover
+{
+    background-color: darkslategray;
+    color: goldenrod;
+}
+
+button:disabled, button:disabled:hover
+{
+    background-color: black;
+    color: black;
+    cursor: default;
+}
