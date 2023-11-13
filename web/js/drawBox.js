@@ -32,8 +32,11 @@ class DrawBox{
                 //=========================
                 #addEventListeners()
                 {
-                    // will record coords of mouse click
-                    //--------------------------
+                    //=========================
+                    // Record coords of mouse click
+                    //=========================
+                    // Web version
+                    //-------------------------
                     this.canvas.onmousedown = (evt) =>  
                     {   
                         //call get_mouse function to retrieve coords
@@ -43,27 +46,49 @@ class DrawBox{
                         this.paths.push([mouse_coords]);
                         this.isDrawing=true;                        
                     }
+                    // touchscreen version
+                    //-------------------------
+                    this.canvas.ontouchstart=(evt)=>
+                    {
+                        const touch_location = evt.touches[0];
+                        this.canvas.onmousedown(touch_location);
+                    }
 
-                    // only process when we are drawing 
-                    //--------------------------
+                    //=========================
+                    // Process when we are drawing 
+                    //=========================
+                    // For Web
+                    //-------------------------
                     this.canvas.onmousemove = (evt) =>  
                     {
                         if(this.isDrawing)
                         {
                             //call get_mouse function to retrieve coords
                             const mouse_coords = this.#get_mouse(evt);
-                            
                             const lastPath = this.paths[this.paths.length-1];
-                            // console.log(mouse_coords);
-                            lastPath.push(mouse_coords);
-                            //console.log(this.path.length);   
+                            lastPath.push(mouse_coords);  
                             
                             this.#redraw();
                         }
-                }
+                    }
+                    // for touchscreen.
+                    //-------------------------
+                    this.canvas.ontouchmove=(evt)=>
+                    {
+                        const touch_location = evt.touches[0];
+                        this.canvas.onmousemove(touch_location);
+                    }
+
+                    //=========================
                     // essentially end line drawn.
-                    //--------------------------
+                    //=========================
+                    // For Web 
+                    //-------------------------
                     this.canvas.onmouseup =()=> {this.isDrawing=false;}
+                    // for touchscreen.
+                    //-------------------------
+                    this.canvas.ontouchend=()=>{this.canvas.onmouseup();}
+
                 }
                 
 

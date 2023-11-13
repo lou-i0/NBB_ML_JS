@@ -3,6 +3,7 @@
 //init object
 const draw = {};
 
+// Create a line 
 draw.path = (ctx, path, color = "black")=>
 {
     ctx.strokeStyle = color;    // define colour of line 
@@ -21,7 +22,7 @@ draw.path = (ctx, path, color = "black")=>
     ctx.stroke();
 }
 
-
+// create multi lines
 draw.paths=(ctx, paths, color="black")=>
 {
     for (const path of paths) 
