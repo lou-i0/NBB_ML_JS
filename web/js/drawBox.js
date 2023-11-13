@@ -19,7 +19,7 @@ class DrawBox{
                     //=========================
                     this.ctx = this.canvas.getContext("2d"); // to draw in 2d space context
 
-                    this.path = [];
+                    this.paths = [];
                     this.isDrawing=false;
 
                     // private method: listen for mouse events
@@ -40,7 +40,7 @@ class DrawBox{
                         const mouse_coords = this.#get_mouse(evt);
 
                         //console.log(mouse_coords);
-                        this.path=[mouse_coords];
+                        this.paths.push([mouse_coords]);
                         this.isDrawing=true;                        
                     }
 
@@ -52,9 +52,10 @@ class DrawBox{
                         {
                             //call get_mouse function to retrieve coords
                             const mouse_coords = this.#get_mouse(evt);
-
+                            
+                            const lastPath = this.paths[this.paths.length-1];
                             // console.log(mouse_coords);
-                            this.path.push(mouse_coords);
+                            lastPath.push(mouse_coords);
                             //console.log(this.path.length);   
                             
                             this.#redraw();
@@ -81,7 +82,7 @@ class DrawBox{
                 {
                     this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height); //clear canvas
 
-                    draw.path(this.ctx, this.path);
+                    draw.paths(this.ctx, this.paths);
                 }
 
             }
