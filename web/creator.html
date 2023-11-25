@@ -106,10 +106,10 @@
                 instructions.innerHTML = "Please download file and place with others."
 
                 const info = document.createElement('a'); //link element
-                info.setAttribute('href','data:text/plain; charset=utf-8,' + encodeURIComponent(JSON.stringify(data)))
+                info.setAttribute('href','data:text/plain; charset=utf-8,' + encodeURIComponent(JSON.stringify(data))) // to download as a json file
 
-                const file_name = data.session + ".json";
-                info.setAttribute('download',file_name);
+                const file_name = data.session + ".json"; // create filename using timestamp of session
+                info.setAttribute('download',file_name); //to download 
                 info.style.display = "none";
 
                 document.body.appendChild(info);
